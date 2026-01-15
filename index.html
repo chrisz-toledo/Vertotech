@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VertoTech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Lato:wght@400;700&family=Merriweather:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style id="document-styles"></style>
+    <style>
+      :root {
+        --border-color: rgba(255, 255, 255, 0.2);
+      }
+      .dark {
+        --border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      body {
+        font-family: 'Figtree', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: #f8fafc; /* slate-50 */
+      }
+      .dark body {
+        background-color: #020617; /* slate-950 */
+      }
+      /* Custom scrollbar for a professional look */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(226, 232, 240, 0.3); /* slate-200 with alpha */
+      }
+      .dark ::-webkit-scrollbar-track {
+        background: rgba(30, 41, 59, 0.3); /* slate-800 with alpha */
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: rgba(165, 180, 252, 0.7); /* indigo-300 with alpha */
+        border-radius: 4px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(129, 140, 248, 0.8); /* indigo-400 with alpha */
+      }
+      .dark ::-webkit-scrollbar-thumb {
+        background-color: rgba(67, 56, 202, 0.7); /* indigo-700 with alpha */
+      }
+       .dark ::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(79, 70, 229, 0.8); /* indigo-600 with alpha */
+      }
+
+      /* Liquid Glass Button Styles */
+      .glass-button, .glass-button-secondary, .glass-button-destructive {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        padding: 0.625rem 1.25rem; /* Equivalent to py-2.5 px-5 */
+        border-radius: 0.5rem;
+        border: 1px solid var(--border-color);
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+      }
+      .glass-button:hover, .glass-button-secondary:hover, .glass-button-destructive:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 7px 14px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.08);
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+      .glass-button:disabled, .glass-button-secondary:disabled, .glass-button-destructive:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: translateY(0);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+      }
+      
+      /* Primary */
+      .glass-button {
+        background-color: rgba(79, 70, 229, 0.5); /* indigo-600 with alpha */
+        color: white;
+      }
+      .glass-button:hover {
+        background-color: rgba(67, 56, 202, 0.7); /* indigo-700 with alpha */
+      }
+      
+      /* Secondary */
+      .glass-button-secondary {
+        background-color: rgba(255, 255, 255, 0.15);
+        color: #334155; /* slate-700 */
+      }
+      .dark .glass-button-secondary {
+          color: #e2e8f0; /* slate-200 */
+      }
+      .glass-button-secondary:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+      }
+
+      /* Destructive */
+      .glass-button-destructive {
+        background-color: rgba(225, 29, 72, 0.5); /* rose-600 with alpha */
+        color: white;
+      }
+      .glass-button-destructive:hover {
+        background-color: rgba(190, 18, 60, 0.7); /* rose-700 with alpha */
+      }
+
+      /* Animation for Bulk Action Bar */
+      @keyframes fade-in-up {
+        0% { opacity: 0; transform: translateY(20px) scale(0.98); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      .animate-fade-in-up {
+          animation: fade-in-up 0.3s ease-out forwards;
+      }
+
+      /* Modal Animation */
+      @keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
+      @keyframes scale-in { 0% { transform: scale(0.95); } 100% { transform: scale(1); } }
+      .modal-backdrop { animation: fade-in 0.2s ease-out forwards; }
+      .modal-content { animation: fade-in 0.2s ease-out forwards, scale-in 0.2s ease-out forwards; }
+
+      /* Peek Panel Animation */
+      @keyframes slide-in-right { 0% { transform: translateX(100%); } 100% { transform: translateX(0); } }
+      @keyframes slide-out-right { 0% { transform: translateX(0); } 100% { transform: translateX(100%); } }
+      .peek-panel-content.open { animation: slide-in-right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+      .peek-panel-content.closed { animation: slide-out-right 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
+      .peek-panel-backdrop { animation: fade-in 0.3s ease-out forwards; }
+
+      /* Filter Panel Animation */
+      @keyframes slide-in-left { 0% { transform: translateX(-100%); } 100% { transform: translateX(0); } }
+      @keyframes slide-out-left { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+      .animate-slide-in-left { animation: slide-in-left 0.3s cubic-bezier(0.25,0.46,0.45,0.94) forwards; }
+      .animate-slide-out-left { animation: slide-out-left 0.3s cubic-bezier(0.55,0.085,0.68,0.53) forwards; }
+
+      /* Popover Animation */
+      @keyframes popover-anim {
+        0% { opacity: 0; transform: translateY(5px) scale(0.98); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      .animate-popover {
+        animation: popover-anim 0.15s ease-out forwards;
+      }
+      
+      /* Card list stagger animation */
+      .stagger-in > * {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fade-in-up 0.4s ease-out forwards;
+      }
+
+      @media print {
+        /* Ensure all containers can expand to show their full content. This is crucial for printing modals. */
+        body, main, div, section, header, footer, article, aside {
+            overflow: visible !important;
+            height: auto !important;
+            max-height: none !important;
+        }
+
+        /* Remove fixed/absolute positioning from modals during print to allow them to flow in the document */
+        div[role="dialog"] {
+            position: static !important;
+        }
+
+        /* Hide all elements by default */
+        body * {
+            visibility: hidden;
+        }
+
+        /* Show only the printable area and its children */
+        .printable-area, .printable-area * {
+            visibility: visible;
+        }
+
+        /* Position the printable area at the top-left corner of the page */
+        .printable-area {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            font-family: var(--doc-font-family, 'Figtree', sans-serif);
+            color: #111827; /* gray-900 */
+        }
+
+        /* Explicitly hide elements marked as no-print */
+        .no-print, .no-print * {
+            display: none !important;
+        }
+
+        /* Generic Document Styles */
+        .doc-header {
+            display: flex !important;
+            align-items: flex-start;
+            border-bottom: 2px solid var(--doc-accent-color, #4f46e5);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .doc-header-logo-left { justify-content: space-between; flex-direction: row-reverse; }
+        .doc-header-logo-center { justify-content: center; text-align: center; flex-direction: column; align-items: center; }
+        .doc-header-logo-center .doc-logo { margin-bottom: 1rem; }
+        .doc-header-logo-right { justify-content: space-between; }
+        
+        .doc-logo { max-width: 150px; max-height: 75px; }
+        .doc-company-info { text-align: right; font-size: 0.875rem; }
+        .doc-header-logo-left .doc-company-info { text-align: left; }
+        .doc-title { font-size: 2.25rem; font-weight: bold; color: var(--doc-accent-color, #4f46e5); margin-bottom: 0.5rem; }
+        .doc-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; font-size: 0.875rem; }
+        .doc-table th, .doc-table td { border: 1px solid #e5e7eb; padding: 0.75rem; text-align: left; }
+        .doc-table th { background-color: #f9fafb !important; -webkit-print-color-adjust: exact; color-adjust: exact; }
+        .doc-totals { margin-top: 1.5rem; text-align: right; }
+        .doc-accent-text { color: var(--doc-accent-color, #4f46e5); }
+        .doc-signature-pad { border: 1px solid #d1d5db; }
+        
+        /* Hide form fields, show display values */
+        .printable-area input, .printable-area select, .printable-area textarea { display: none !important; }
+        .doc-display-value { display: block !important; visibility: visible !important; }
+
+        .check-container { page-break-inside: avoid; }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.9.0",
+    "qrcode": "https://esm.sh/qrcode@^1.5.3",
+    "jsqr": "https://esm.sh/jsqr@1.4.0",
+    "jszip": "https://esm.sh/jszip@3.10.1",
+    "signature_pad": "https://esm.sh/signature_pad@^4.2.0",
+    "zustand": "https://esm.sh/zustand@^4.5.4",
+    "zustand/": "https://esm.sh/zustand@^5.0.6/",
+    "jspdf": "https://esm.sh/jspdf@^2.5.1",
+    "html2canvas": "https://esm.sh/html2canvas@^1.4.1",
+    "uuid": "https://esm.sh/uuid@^9.0.1"
+  }
+}
+</script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: 'var(--color-primary, #4f46e5)', // indigo-600
+            'primary-hover': 'var(--color-primary-hover, #4338ca)', // indigo-700
+            accent: 'var(--color-accent, #06b6d4)', // cyan-500
+            'accent-hover': 'var(--color-accent-hover, #0891b2)', // cyan-600
+            
+            indigo: {
+              '50': '#eef2ff', '100': '#e0e7ff', '200': '#c7d2fe', '300': '#a5b4fc', '400': '#818cf8', '500': '#6366f1',
+              '600': '#4f46e5', '700': '#4338ca', '800': '#3730a3', '900': '#312e81', '950': '#1e1b4b',
+            },
+            cyan: {
+              '50': '#ecfeff', '100': '#cffafe', '200': '#a5f3fc', '300': '#67e8f9', '400': '#22d3ee', '500': '#06b6d4',
+              '600': '#0891b2', '700': '#0e7490', '800': '#155e75', '900': '#164e63', '950': '#083344',
+            }
+          },
+        },
+      },
+      plugins: [],
+    }
+  </script>
+</head>
+  <body class="text-slate-800 dark:text-slate-200 transition-colors duration-300">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

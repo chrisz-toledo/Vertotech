@@ -1,0 +1,10 @@
+{
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ],
+  "name": "Copy of VertoTech",
+  "description": "",
+  "prompt": ""
+}
