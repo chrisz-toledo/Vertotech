@@ -3,3 +3,7 @@ export * from './people';
 export * from './crm';
 export * from './finance';
 export * from './operations';
+export * from './branch';
+export * from './accounting';
+export * from './warehouse';
+export * from './roles';

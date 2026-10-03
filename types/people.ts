@@ -42,6 +42,9 @@ export interface Employee {
   documents?: ComplianceDocument[];
   createdAt: string;
   balanceHistory: BalanceEntry[];
+  branchId?: string; // Optional branch scope; undefined means "all branches"
+  /** Assigned role ids (see types/roles.ts). Undefined = legacy behavior (falls back to the job-title `role` mechanism). */
+  roleIds?: string[];
 }
 
 export interface ClientRating {
