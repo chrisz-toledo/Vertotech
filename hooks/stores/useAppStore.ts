@@ -8,6 +8,7 @@ import { usePeopleStore, initialState as peopleInitialState } from './usePeopleS
 import { useCrmStore, initialState as crmInitialState } from './useCrmStore';
 import { useFinanceStore, initialState as financeInitialState } from './useFinanceStore';
 import { useOperationsStore, initialState as operationsInitialState } from './useOperationsStore';
+import { useWarehouseStore, initialState as warehouseInitialState, buildLowStockAlerts } from './useWarehouseStore';
 import * as geminiService from '../../services/geminiService';
 
 interface ConfirmationState {
@@ -203,7 +204,8 @@ export const useAppStore = create<AppState & AppActions>()(
                 set({ isAlertsLoading: true });
                 const { safetyReports } = useOperationsStore.getState();
                 const alerts = await geminiService.generateAlerts(safetyReports);
-                set({ alerts, isAlertsLoading: false });
+                const lowStockAlerts = buildLowStockAlerts();
+                set({ alerts: [...alerts, ...lowStockAlerts], isAlertsLoading: false });
             },
             generateComplianceAlerts: async () => {
                 set({ isAlertsLoading: true });
@@ -239,6 +241,7 @@ export const useAppStore = create<AppState & AppActions>()(
                 useCrmStore.setState({ prospects: demoData.prospects, opportunities: demoData.opportunities, deletedProspects: [], deletedOpportunities: [] });
                 useFinanceStore.setState({ invoices: demoData.invoices, estimates: demoData.estimates, priceItems: demoData.priceItems, expenses: [], payables: [], purchaseOrders: [], pettyCashTransactions: [], payrollRuns: [], quoteRequests: [], deletedInvoices: [], deletedEstimates: [], deletedPriceItems: [], deletedExpenses: [], deletedPayables: [], deletedPurchaseOrders: [], deletedPettyCash: [], deletedQuoteRequests: [] });
                 useOperationsStore.setState({ jobsites: demoData.jobsites, extraWorkTickets: demoData.extraWorkTickets, legalDocuments: demoData.legalDocuments, contracts: [], timeLogs: [], tools: [], materials: [], productionLogs: [], bids: [], punchLists: [], vehicles: [], safetyReports: [], attendanceRecords: [], schedule: [], maintenanceLogs: [], toolAssignmentLogs: [], dailyLogs: [], deletedJobsites: [], deletedTimeLogs: [], deletedExtraWorkTickets: [], deletedTools: [], deletedMaterials: [], deletedContracts: [], deletedProductionLogs: [], deletedBids: [], deletedPunchLists: [], deletedVehicles: [], deletedLegalDocuments: [], deletedDailyLogs: [] });
+                useWarehouseStore.setState({ warehouses: [], stockMovements: [], deletedWarehouses: [], deletedStockMovements: [] });
                 set({ notifications: [{ id: '1', message: 'Demo data loaded successfully!', type: 'success', createdAt: new Date().toISOString(), read: false }], currentUser: demoData.employees[0] });
             },
              resetData: () => {
@@ -249,6 +252,7 @@ export const useAppStore = create<AppState & AppActions>()(
                 useCrmStore.setState(crmInitialState);
                 useFinanceStore.setState(financeInitialState);
                 useOperationsStore.setState(operationsInitialState);
+                useWarehouseStore.setState(warehouseInitialState);
                 set(initialState);
             },
             exportData: () => {
@@ -259,6 +263,7 @@ export const useAppStore = create<AppState & AppActions>()(
                     crm: useCrmStore.getState(),
                     finance: useFinanceStore.getState(),
                     operations: useOperationsStore.getState(),
+                    warehouse: useWarehouseStore.getState(),
                 };
                 zip.file("data.json", JSON.stringify(allState, null, 2));
                 zip.generateAsync({ type: "blob" }).then(content => {
@@ -280,12 +285,13 @@ export const useAppStore = create<AppState & AppActions>()(
                         const importedState = JSON.parse(dataText);
                         
                         // Selectively restore state to avoid overwriting functions
-                        const { app, people, crm, finance, operations } = importedState;
+                        const { app, people, crm, finance, operations, warehouse } = importedState;
                         set(app);
                         usePeopleStore.setState(people);
                         useCrmStore.setState(crm);
                         useFinanceStore.setState(finance);
                         useOperationsStore.setState(operations);
+                        if (warehouse) useWarehouseStore.setState(warehouse);
                         
                         alert("Data imported successfully!");
                     } else {

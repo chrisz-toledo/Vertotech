@@ -9,6 +9,7 @@ import { useOperationsStore } from '../hooks/stores/useOperationsStore';
 import { useAiStore } from '../hooks/stores/useAiStore';
 import { useModalManager } from '../hooks/useModalManager';
 import { usePeekPanel } from '../hooks/usePeekPanel';
+import { useBranchStore } from '../hooks/stores/useBranchStore';
 import { GlobalSearchDropdown } from './new/GlobalSearchDropdown';
 
 import { UsersGroupIcon } from './icons/UsersGroupIcon';
@@ -116,6 +117,9 @@ const Header: React.FC = () => {
   const crmState = useCrmStore();
   const financeState = useFinanceStore();
   const operationsState = useOperationsStore();
+
+  const { branches, currentBranchId, setCurrentBranch } = useBranchStore();
+  const activeBranches = branches.filter(b => b.isActive);
   
   const unreadCount = useMemo(() => {
       if (!notifications) return 0;
@@ -183,6 +187,21 @@ const Header: React.FC = () => {
         </div>
       
         <div className="flex items-center gap-2">
+            {activeBranches.length > 0 && (
+                <div className="hidden sm:flex items-center gap-2" title={t('selectBranch')}>
+                    <BuildingIcon className="w-5 h-5 text-gray-500 dark:text-gray-400 flex-shrink-0" />
+                    <select
+                        value={currentBranchId ?? ''}
+                        onChange={(e) => setCurrentBranch(e.target.value)}
+                        aria-label={t('selectBranch')}
+                        className="max-w-48 px-3 py-2 text-sm font-semibold bg-white/70 dark:bg-gray-800/70 backdrop-blur-md text-gray-900 dark:text-white border border-white/20 dark:border-gray-700/50 rounded-full focus:ring-2 focus:ring-indigo-500 shadow-md cursor-pointer truncate"
+                    >
+                        {activeBranches.map(b => (
+                            <option key={b.id} value={b.id}>{b.name}</option>
+                        ))}
+                    </select>
+                </div>
+            )}
             <div className="relative" ref={createMenuRef}>
                 <button 
                     onClick={() => setCreateMenuOpen(prev => !prev)}

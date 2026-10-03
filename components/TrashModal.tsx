@@ -4,6 +4,7 @@ import { usePeopleStore } from '../hooks/stores/usePeopleStore';
 import { useCrmStore } from '../hooks/stores/useCrmStore';
 import { useFinanceStore } from '../hooks/stores/useFinanceStore';
 import { useOperationsStore } from '../hooks/stores/useOperationsStore';
+import { useWarehouseStore } from '../hooks/stores/useWarehouseStore';
 import { useTranslation } from '../hooks/useTranslation';
 
 
@@ -36,6 +37,7 @@ import { HandshakeIcon } from './icons/new/HandshakeIcon';
 import { SupplierIcon } from './icons/new/SupplierIcon';
 import { BookOpenIcon } from './icons/new/BookOpenIcon';
 import { MegaphoneIcon } from './icons/new/MegaphoneIcon';
+import { ArrowsRightLeftIcon } from './icons/new/ArrowsRightLeftIcon';
 
 interface TrashModalProps {
     isOpen: boolean;
@@ -79,6 +81,8 @@ const TRASH_CONFIG: Record<TrashableType, { labelKey: any; icon: React.ReactNode
     punchLists: { labelKey: 'tasks', icon: <ChecklistIcon className="w-5 h-5" /> },
     vehicles: { labelKey: 'fleet', icon: <TruckIcon className="w-5 h-5" /> },
     quoteRequests: { labelKey: 'requestForQuote', icon: <MegaphoneIcon className="w-5 h-5" /> },
+    warehouses: { labelKey: 'warehouses', icon: <BuildingIcon className="w-5 h-5" /> },
+    stockMovements: { labelKey: 'stock-movements', icon: <ArrowsRightLeftIcon className="w-5 h-5" /> },
 };
 
 const DeletedItem: React.FC<{ item: any; config: typeof TRASH_CONFIG[TrashableType]; isSelected: boolean; onToggle: () => void; details?: string }> = ({ item, config, isSelected, onToggle, details }) => {
@@ -104,6 +108,7 @@ export const TrashModal: React.FC<TrashModalProps> = ({ isOpen, onClose }) => {
     const crmState = useCrmStore();
     const financeState = useFinanceStore();
     const operationsState = useOperationsStore();
+    const warehouseState = useWarehouseStore();
     
     const { clients } = peopleState;
     const { jobsites } = operationsState;
@@ -112,6 +117,7 @@ export const TrashModal: React.FC<TrashModalProps> = ({ isOpen, onClose }) => {
         if (['employees', 'clients', 'subcontractors', 'suppliers'].includes(type)) peopleState.restoreItem(ids, type);
         else if (['prospects', 'opportunities'].includes(type)) crmState.restoreItem(ids, type);
         else if (['invoices', 'estimates', 'priceItems', 'expenses', 'payables', 'purchaseOrders', 'pettyCash', 'quoteRequests'].includes(type)) financeState.restoreItem(ids, type);
+        else if (['warehouses', 'stockMovements'].includes(type)) warehouseState.restoreItem(ids, type);
         else operationsState.restoreItem(ids, type);
     };
 
@@ -119,6 +125,7 @@ export const TrashModal: React.FC<TrashModalProps> = ({ isOpen, onClose }) => {
         if (['employees', 'clients', 'subcontractors', 'suppliers'].includes(type)) peopleState.permanentlyDeleteItem(ids, type);
         else if (['prospects', 'opportunities'].includes(type)) crmState.permanentlyDeleteItem(ids, type);
         else if (['invoices', 'estimates', 'priceItems', 'expenses', 'payables', 'purchaseOrders', 'pettyCash', 'quoteRequests'].includes(type)) financeState.permanentlyDeleteItem(ids, type);
+        else if (['warehouses', 'stockMovements'].includes(type)) warehouseState.permanentlyDeleteItem(ids, type);
         else operationsState.permanentlyDeleteItem(ids, type);
     };
     
@@ -150,8 +157,10 @@ export const TrashModal: React.FC<TrashModalProps> = ({ isOpen, onClose }) => {
             punchLists: operationsState.deletedPunchLists,
             vehicles: operationsState.deletedVehicles,
             quoteRequests: financeState.deletedQuoteRequests,
+            warehouses: warehouseState.deletedWarehouses,
+            stockMovements: warehouseState.deletedStockMovements,
         };
-    }, [peopleState, crmState, financeState, operationsState]);
+    }, [peopleState, crmState, financeState, operationsState, warehouseState]);
     
     const tabs = useMemo(() => Object.keys(data).filter(key => data[key as TrashableType]?.length > 0) as TrashableType[], [data]);
     const [activeTab, setActiveTab] = useState<TrashableType>('employees');
