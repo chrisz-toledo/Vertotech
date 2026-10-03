@@ -118,7 +118,7 @@ export const DailyLogModal: React.FC<DailyLogModalProps> = ({ isOpen, onClose })
         const files = e.target.files;
         if (!files || !logData) return;
 
-        const newPhotos: LogPhoto[] = Array.from(files).map(file => {
+        const newPhotos: LogPhoto[] = Array.from(files).map((file: File) => {
             const docData = readFileAsObjectUrl(file);
             return {
                 id: `photo-${Date.now()}-${Math.random()}`,

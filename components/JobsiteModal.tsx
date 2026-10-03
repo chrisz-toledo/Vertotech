@@ -1,8 +1,8 @@
 import React from 'react';
 import { JobsiteModal as NewJobsiteModal } from './new/JobsiteModal';
-import { usePeopleStore } from '../../hooks/stores/usePeopleStore';
-import { useOperationsStore } from '../../hooks/stores/useOperationsStore';
-import { useAppStore } from '../../hooks/stores/useAppStore';
+import { usePeopleStore } from '../hooks/stores/usePeopleStore';
+import { useOperationsStore } from '../hooks/stores/useOperationsStore';
+import { useAppStore } from '../hooks/stores/useAppStore';
 
 // This component is now a wrapper for the new JobsiteModal
 // It ensures that any old references to this component still work while we transition.

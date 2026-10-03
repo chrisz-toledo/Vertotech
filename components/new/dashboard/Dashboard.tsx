@@ -10,12 +10,12 @@ import AlertsWidget from './AlertsWidget';
 import StatCard from './StatCard';
 import { UsersGroupIcon } from '../../icons/UsersGroupIcon';
 import { BuildingIcon } from '../../icons/BuildingIcon';
-import { BriefcaseIcon } from '../icons/new/BriefcaseIcon';
+import { BriefcaseIcon } from '../../icons/new/BriefcaseIcon';
 import FinancialSummaryWidget from './FinancialSummaryWidget';
 import ActionItemsWidget from './ActionItemsWidget';
 import OperationalSummaryWidget from './OperationalSummaryWidget';
 import { ConsideredOpinionsWidget } from '../ConsideredOpinionsWidget';
-import { GripVerticalIcon } from '../icons/new/GripVerticalIcon';
+import { GripVerticalIcon } from '../../icons/new/GripVerticalIcon';
 import type { DashboardDateRange } from '../../../hooks/stores/useAppStore';
 
 

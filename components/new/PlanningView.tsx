@@ -114,7 +114,7 @@ const PlanningView: React.FC = () => {
         setIsLoading(true);
         setOptimizationResult(null);
         try {
-            const currentWeekEntries = Array.from(weekSchedule.values()).flat();
+            const currentWeekEntries = Array.from(weekSchedule.values()).flat() as ScheduleEntry[];
             const result = await geminiService.optimizeSchedule(currentWeekEntries, employees, jobsites);
             setOptimizationResult(result);
         } catch (error) {

@@ -14,7 +14,7 @@ import type { Jobsite, Employee, ExtraWorkTicket, DailyLog } from '../../types';
 
 const FinancialHealthWidget: React.FC<{ jobsite: Jobsite; financials: { actuals: { total: number } } }> = ({ jobsite, financials }) => {
     const { t } = useTranslation();
-    const totalBudget = Object.values(jobsite.budget).reduce((sum, val) => sum + val, 0);
+    const totalBudget = Object.values(jobsite.budget as Record<string, number>).reduce((sum, val) => sum + val, 0);
     const progress = totalBudget > 0 ? (financials.actuals.total / totalBudget) * 100 : 0;
     const progressColor = progress > 100 ? 'bg-rose-500' : progress > 85 ? 'bg-amber-500' : 'bg-emerald-500';
 

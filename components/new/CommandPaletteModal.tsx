@@ -13,7 +13,7 @@ interface CommandPaletteModalProps {
 export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({ isOpen, onClose, commands, query, setQuery }) => {
     const [activeIndex, setActiveIndex] = useState(0);
 
-    const groupedCommands = useMemo(() => {
+    const groupedCommands = useMemo<Record<string, Command[]>>(() => {
         return commands.reduce((acc, cmd) => {
             if (!acc[cmd.section]) {
                 acc[cmd.section] = [];
@@ -83,7 +83,7 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({ isOpen
                     />
                 </div>
                 <ul className="flex-grow overflow-y-auto max-h-[50vh] p-2">
-                    {Object.entries(groupedCommands).length > 0 ? Object.entries(groupedCommands).map(([section, cmds]) => (
+                    {Object.entries(groupedCommands).length > 0 ? Object.entries(groupedCommands).map(([section, cmds]: [string, Command[]]) => (
                         <li key={section}>
                             <h3 className="px-2 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400">{section}</h3>
                             <ul className="space-y-1">

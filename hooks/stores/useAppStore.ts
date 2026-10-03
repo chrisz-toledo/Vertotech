@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { ReactNode } from 'react';
 import JSZip from 'jszip';
 import type { CompanyInfo, FinancialSettings, Notification, ConsideredOpinion, JobRole, StoreState, ProductionLog, ViewType, Alert, FilterableEntity, SavedView, Employee, DocumentSettings } from '../../types';
 import { initialCompanyInfo, initialJobRoles, demoData, initialSafetyTips } from '../../data/initialData';
@@ -12,7 +13,7 @@ import * as geminiService from '../../services/geminiService';
 interface ConfirmationState {
     isOpen: boolean;
     title: string;
-    message: string | React.ReactNode;
+    message: string | ReactNode;
     onConfirm: () => void;
 }
 

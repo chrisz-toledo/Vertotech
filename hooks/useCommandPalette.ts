@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
+import type { ReactNode } from 'react';
 
 export interface Command {
     id: string;
     name: string;
     section: string;
     action: () => void;
-    icon: React.ReactNode;
+    icon: ReactNode;
 }
 
 export const useCommandPalette = (commands: Command[]) => {

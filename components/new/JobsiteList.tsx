@@ -82,7 +82,7 @@ const JobsiteCard: React.FC<JobsiteCardProps> = ({ jobsite, actualCosts }) => {
     const { getClientProgressSummary } = useAiStore();
     const { deleteJobsite } = useOperationsStore();
 
-    const totalBudget = Object.values(jobsite.budget).reduce((sum, val) => sum + val, 0);
+    const totalBudget = Object.values(jobsite.budget as Record<string, number>).reduce((sum, val) => sum + val, 0);
     const budgetProgress = totalBudget > 0 ? (actualCosts.total / totalBudget) * 100 : 0;
     const progressColor = budgetProgress > 100 ? 'bg-rose-500' : budgetProgress > 80 ? 'bg-amber-500' : 'bg-emerald-500';
 
