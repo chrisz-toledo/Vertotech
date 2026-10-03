@@ -35,6 +35,7 @@ export interface Jobsite {
   isWorkTimeEnforced?: boolean;
   workStartTime?: string; // e.g., "06:00"
   workEndTime?: string; // e.g., "17:00"
+  branchId?: string; // Optional branch scope; undefined means "all branches"
 }
 
 export interface DailyHours {

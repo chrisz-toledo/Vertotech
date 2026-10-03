@@ -5,6 +5,7 @@ import { useAppStore } from '../hooks/stores/useAppStore';
 import { useModalManager } from '../hooks/useModalManager';
 import { useTranslation } from '../hooks/useTranslation';
 import { getNavGroupDefinitions, NavGroup } from '../config/navigation';
+import { useCurrentUserRoleIds, usePermissions } from '../hooks/usePermissions';
 import Header from './Header';
 import AppRouter from './AppRouter';
 import { ChevronRightIcon } from './icons/ChevronRightIcon';
@@ -38,7 +39,10 @@ export const Layout: React.FC = () => {
     };
 
     const navGroupDefinitions = useMemo(() => getNavGroupDefinitions(), []);
-    
+
+    const userRoleIds = useCurrentUserRoleIds(currentUser?.id);
+    const can = usePermissions(userRoleIds);
+
     const navGroups = useMemo(() => {
         const userRole = currentUser?.role || 'Labor'; // Default role if none is set
         return navGroupDefinitions
@@ -50,9 +54,11 @@ export const Layout: React.FC = () => {
             .map(group => ({
                 ...group,
                 label: t(group.labelKey as any),
-                items: group.items.map(item => ({...item, label: t(item.id === 'crm' ? 'opportunities' : item.id as any)}))
+                items: group.items
+                    .filter(item => !item.requiredPermission || can(item.requiredPermission))
+                    .map(item => ({...item, label: t(item.id === 'crm' ? 'opportunities' : item.id as any)}))
             }));
-    }, [t, navGroupDefinitions, currentUser]);
+    }, [t, navGroupDefinitions, currentUser, can]);
     
     const handleItemClick = (item: NavGroup['items'][0]) => {
         if (item.action?.type === 'modal') {

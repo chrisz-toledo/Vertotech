@@ -6,6 +6,10 @@ import { useFinanceStore } from '../hooks/stores/useFinanceStore';
 import { useOperationsStore } from '../hooks/stores/useOperationsStore';
 import { useAiStore } from '../hooks/stores/useAiStore';
 import { useModalManager } from '../hooks/useModalManager';
+import { useTranslation } from '../hooks/useTranslation';
+import { useCurrentUserRoleIds, usePermissions } from '../hooks/usePermissions';
+import type { ViewType } from '../types';
+import { ShieldCheckIcon } from './icons/new/ShieldCheckIcon';
 
 // UI Components
 import Dashboard from './new/Dashboard';
@@ -18,6 +22,8 @@ import ExtraWorkTicketList from './new/ExtraWorkTicketList';
 import InvoiceList from './new/InvoiceList';
 import DocumentHub from './new/DocumentHub';
 import InventoryView from './new/InventoryView';
+import WarehousesView from './new/WarehousesView';
+import StockMovementsView from './new/StockMovementsView';
 import ExpenseList from './new/ExpenseList';
 import PayableList from './new/PayableList';
 import PlanningView from './new/PlanningView';
@@ -39,18 +45,53 @@ import CRMView from '../features/crm/CRMView';
 import ProspectListView from '../features/crm/ProspectListView';
 import SupplierList from './new/SupplierList';
 import DailyLogView from './new/DailyLogView';
+import BranchesView from './new/BranchesView';
 import ProjectCenterView from './new/ProjectCenterView';
 import MyDayView from './new/my-day/MyDayView';
 import { LeaveRequestView } from '../features/people/LeaveRequestView';
+import AccountingView from './new/AccountingView';
+import JournalView from './new/JournalView';
+import LedgerView from './new/LedgerView';
+import TrialBalanceView from './new/TrialBalanceView';
+import ReconciliationView from './new/ReconciliationView';
+import RolesView from './new/RolesView';
+
+/**
+ * View id → required permission key. Views not listed here default to `view:<id>`.
+ */
+const VIEW_PERMISSIONS: Partial<Record<ViewType, string>> = {};
+
+const viewPermission = (view: ViewType): string => VIEW_PERMISSIONS[view] ?? `view:${view}`;
+
+const AccessDenied: React.FC = () => {
+    const { t } = useTranslation();
+    return (
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+            <ShieldCheckIcon className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-4" />
+            <h2 className="text-xl font-bold text-gray-700 dark:text-gray-200">{t('accessDenied')}</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('accessDeniedDesc')}</p>
+        </div>
+    );
+};
 
 const AppRouter: React.FC = () => {
     const { open: openModal } = useModalManager();
     const currentView = useAppStore(s => s.currentView);
+    const currentUserId = useAppStore(s => s.currentUser?.id);
+    const userRoleIds = useCurrentUserRoleIds(currentUserId);
+    const can = usePermissions(userRoleIds);
     const peopleStore = usePeopleStore();
     const crmStore = useCrmStore();
     const financeStore = useFinanceStore();
     const operationsStore = useOperationsStore();
     const appStore = useAppStore();
+
+    // Route-level guard: render an access-denied placeholder when the user's
+    // assigned roles don't grant the view's permission. Users without assigned
+    // roles fall back to allowed (legacy behavior).
+    if (!can(viewPermission(currentView))) {
+        return <AccessDenied />;
+    }
 
     switch (currentView) {
         case 'dashboard': return <Dashboard />;
@@ -67,6 +108,7 @@ const AppRouter: React.FC = () => {
             onDelete={(sub) => appStore.confirm({ title: 'Eliminar Subcontratista', message: `Mover ${sub.name} a la papelera?`, onConfirm: () => peopleStore.deleteSubcontractor([sub.id])})}
         />;
         case 'leave-requests': return <LeaveRequestView />;
+        case 'roles': return <RolesView />;
         case 'suppliers': return <SupplierList />;
         case 'jobsites': return <JobsiteList />;
         case 'daily-logs': return <DailyLogView />;
@@ -125,6 +167,14 @@ const AppRouter: React.FC = () => {
         case 'petty-cash': return <PettyCashView />;
         case 'expenses': return <ExpenseList />;
         case 'inventory': return <InventoryView />;
+        case 'branches': return <BranchesView />;
+        case 'accounting': return <AccountingView />;
+        case 'journal': return <JournalView />;
+        case 'ledger': return <LedgerView />;
+        case 'trial-balance': return <TrialBalanceView />;
+        case 'reconciliation': return <ReconciliationView />;
+        case 'warehouses': return <WarehousesView />;
+        case 'stock-movements': return <StockMovementsView />;
         case 'fleet': return <FleetView 
             vehicles={operationsStore.vehicles}
             maintenanceLogs={operationsStore.maintenanceLogs}

@@ -85,14 +85,15 @@ export interface Notification {
   read: boolean;
 }
 
-export type ViewType = 'dashboard' | 'my-day' | 'bids' | 'employees' | 'clients' | 'subcontractors' | 'jobsites' | 'planning' | 'time-tracking' | 'productivity' | 'extra-work' | 'payroll' | 'balance' | 'invoices' | 'estimates' | 'purchase-orders' | 'payables' | 'petty-cash' | 'expenses' | 'inventory' | 'fleet' | 'training' | 'safety' | 'analytics' | 'documents' | 'legal' | 'prices' | 'crm' | 'prospects' | 'suppliers' | 'daily-logs' | 'project-center' | 'leave-requests' | 'contracts' | 'tasks';
+export type ViewType = 'dashboard' | 'my-day' | 'bids' | 'employees' | 'clients' | 'subcontractors' | 'jobsites' | 'planning' | 'time-tracking' | 'productivity' | 'extra-work' | 'payroll' | 'balance' | 'invoices' | 'estimates' | 'purchase-orders' | 'payables' | 'petty-cash' | 'expenses' | 'inventory' | 'warehouses' | 'stock-movements' | 'fleet' | 'training' | 'safety' | 'analytics' | 'documents' | 'legal' | 'prices' | 'crm' | 'prospects' | 'suppliers' | 'daily-logs' | 'project-center' | 'leave-requests' | 'contracts' | 'tasks' | 'branches' | 'accounting' | 'journal' | 'ledger' | 'trial-balance' | 'reconciliation' | 'roles';
 
 export type TrashableType = 
     | 'employees' | 'clients' | 'jobsites' | 'timeLogs' | 'extraWorkTickets' 
     | 'invoices' | 'estimates' | 'tools' | 'materials' | 'expenses' | 'payables' 
     | 'purchaseOrders' | 'pettyCash' | 'subcontractors' | 'contracts' 
     | 'productionLogs' | 'bids' | 'punchLists' | 'vehicles' | 'legalDocuments' | 'priceItems'
-    | 'prospects' | 'opportunities' | 'suppliers' | 'dailyLogs' | 'quoteRequests';
+    | 'prospects' | 'opportunities' | 'suppliers' | 'dailyLogs' | 'quoteRequests'
+    | 'warehouses' | 'stockMovements';
 
 export interface FinancialSettings {
     defaultTaxRate: number; // As a percentage, e.g., 8.25 for 8.25%

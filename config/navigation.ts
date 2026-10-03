@@ -32,6 +32,7 @@ import { BriefcaseIcon } from '../components/icons/new/BriefcaseIcon';
 import { DollarSignIcon } from '../components/icons/DollarSignIcon';
 import { BullhornIcon } from '../components/icons/new/BullhornIcon';
 import { HandshakeIcon } from '../components/icons/new/HandshakeIcon';
+import { ArrowsRightLeftIcon } from '../components/icons/new/ArrowsRightLeftIcon';
 import { SupplierIcon } from '../components/icons/new/SupplierIcon';
 import { ChartPieIcon } from '../components/icons/new/ChartPieIcon';
 import { BookOpenIcon } from '../components/icons/new/BookOpenIcon';
@@ -45,6 +46,8 @@ type NavItem = {
     id: ViewType;
     icon: React.ReactNode;
     action?: { type: 'modal', id: ModalId } | { type: 'view', id: ViewType };
+    /** Optional permission key (e.g. 'view:roles'). The item is hidden when the current user lacks it. */
+    requiredPermission?: string;
 };
 
 export type NavGroup = {
@@ -65,6 +68,8 @@ export const getNavGroupDefinitions = (): NavGroup[] => [
             { id: 'my-day', icon: React.createElement(ClipboardCheckIcon, { className: "w-5 h-5" }) },
             { id: 'project-center', icon: React.createElement(TargetIcon, { className: "w-5 h-5" }) },
             { id: 'analytics', icon: React.createElement(ChartPieIcon, { className: "w-5 h-5" }) },
+            { id: 'branches', icon: React.createElement(BuildingIcon, { className: "w-5 h-5" }) },
+            { id: 'roles', icon: React.createElement(ShieldCheckIcon, { className: "w-5 h-5" }), requiredPermission: 'view:roles' },
         ]
     },
     {
@@ -102,6 +107,11 @@ export const getNavGroupDefinitions = (): NavGroup[] => [
             { id: 'suppliers', icon: React.createElement(SupplierIcon, { className: "w-5 h-5" }) },
             { id: 'petty-cash', icon: React.createElement(CashIcon, { className: "w-5 h-5" }) },
             { id: 'balance', icon: React.createElement(CoinsIcon, { className: "w-5 h-5" }) },
+            { id: 'accounting', icon: React.createElement(BookOpenIcon, { className: "w-5 h-5" }) },
+            { id: 'journal', icon: React.createElement(ReceiptIcon, { className: "w-5 h-5" }) },
+            { id: 'ledger', icon: React.createElement(CalculatorIcon, { className: "w-5 h-5" }) },
+            { id: 'trial-balance', icon: React.createElement(ChartBarIcon, { className: "w-5 h-5" }) },
+            { id: 'reconciliation', icon: React.createElement(CoinsIcon, { className: "w-5 h-5" }) },
             { id: 'prices', icon: React.createElement(PriceTagIcon, { className: "w-5 h-5" }), action: { type: 'modal', id: 'prices' } }
         ],
         requiredRoles: ['Owner', 'Project Manager']
@@ -118,6 +128,8 @@ export const getNavGroupDefinitions = (): NavGroup[] => [
             { id: 'productivity', icon: React.createElement(ChartBarIcon, { className: "w-5 h-5" }) },
             { id: 'extra-work', icon: React.createElement(TicketIcon, { className: "w-5 h-5" }) },
             { id: 'inventory', icon: React.createElement(ToolboxIconSimple, { className: "w-5 h-5" }) },
+            { id: 'warehouses', icon: React.createElement(BuildingIcon, { className: "w-5 h-5" }) },
+            { id: 'stock-movements', icon: React.createElement(ArrowsRightLeftIcon, { className: "w-5 h-5" }) },
             { id: 'fleet', icon: React.createElement(TruckIcon, { className: "w-5 h-5" }) },
             { id: 'safety', icon: React.createElement(ShieldCheckIcon, { className: "w-5 h-5" }) },
             { id: 'documents', icon: React.createElement(FolderIcon, { className: "w-5 h-5" }) },

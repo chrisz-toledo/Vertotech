@@ -23,6 +23,7 @@ export interface Invoice {
   notes: string;
   createdAt: string;
   deletedAt?: string;
+  branchId?: string; // Optional branch scope; undefined means "all branches"
 }
 
 export interface EstimateLineItem {
