@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import type { Branch } from '../../types';
+import { INDUSTRY_IDS, INDUSTRY_PROFILES, type IndustryId } from '../../types/industry';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useBranchStore } from '../../hooks/stores/useBranchStore';
+import { useIndustryStore } from '../../hooks/stores/useIndustryStore';
 import { usePeopleStore } from '../../hooks/stores/usePeopleStore';
 import { useAppStore } from '../../hooks/stores/useAppStore';
 import { BuildingIcon } from '../icons/BuildingIcon';
@@ -20,6 +22,8 @@ const BranchFormModal: React.FC<{ isOpen: boolean; onClose: () => void; editingB
     const [address, setAddress] = useState(editingBranch?.address || '');
     const [phone, setPhone] = useState(editingBranch?.phone || '');
     const [managerId, setManagerId] = useState(editingBranch?.managerId || '');
+    const [industryId, setIndustryId] = useState<IndustryId | ''>(editingBranch?.industryId || '');
+    const defaultIndustryId = useIndustryStore(s => s.defaultIndustryId);
 
     if (!isOpen) return null;
 
@@ -34,6 +38,7 @@ const BranchFormModal: React.FC<{ isOpen: boolean; onClose: () => void; editingB
                 address: address.trim(),
                 phone: phone.trim(),
                 managerId: managerId || undefined,
+                industryId: industryId || undefined,
                 isActive: editingBranch?.isActive ?? true,
             },
             editingBranch?.id
@@ -76,6 +81,15 @@ const BranchFormModal: React.FC<{ isOpen: boolean; onClose: () => void; editingB
                             </select>
                         </div>
                     </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">{t('industry_branchIndustry')}</label>
+                        <select value={industryId} onChange={(e) => setIndustryId(e.target.value as IndustryId | '')} className={inputClass}>
+                            <option value="">{t('industry_branchIndustryDefaultOption', { industry: INDUSTRY_PROFILES[defaultIndustryId].name })}</option>
+                            {INDUSTRY_IDS.map(id => (
+                                <option key={id} value={id}>{INDUSTRY_PROFILES[id].icon} {t(`industry_${id}` as any)}</option>
+                            ))}
+                        </select>
+                    </div>
                     <div className="flex justify-end gap-3 pt-4">
                         <button type="button" onClick={onClose} className="px-5 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600">
                             {t('cancel')}
@@ -93,6 +107,8 @@ const BranchFormModal: React.FC<{ isOpen: boolean; onClose: () => void; editingB
 const BranchesView: React.FC = () => {
     const { t } = useTranslation();
     const { branches, currentBranchId, saveBranch, deleteBranch, setCurrentBranch } = useBranchStore();
+    const defaultIndustryId = useIndustryStore(s => s.defaultIndustryId);
+    const setDefaultIndustryId = useIndustryStore(s => s.setDefaultIndustryId);
     const employees = usePeopleStore(s => s.employees);
     const confirm = useAppStore(s => s.confirm);
 
@@ -136,6 +152,24 @@ const BranchesView: React.FC = () => {
                 </button>
             </div>
 
+            <div className="bg-white dark:bg-gray-800 p-5 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
+                    <div>
+                        <h3 className="text-base font-bold text-gray-900 dark:text-white">{t('industry_defaultTitle')}</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{t('industry_defaultDesc')}</p>
+                    </div>
+                    <select
+                        value={defaultIndustryId}
+                        onChange={(e) => setDefaultIndustryId(e.target.value as IndustryId)}
+                        className="sm:w-64 px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                        {INDUSTRY_IDS.map(id => (
+                            <option key={id} value={id}>{INDUSTRY_PROFILES[id].icon} {t(`industry_${id}` as any)}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                 {branches.map(branch => {
                     const isCurrent = branch.id === currentBranchId;
@@ -166,6 +200,12 @@ const BranchesView: React.FC = () => {
                             <div className="mt-4 space-y-1 text-sm text-gray-600 dark:text-gray-300">
                                 {branch.address && <p>{branch.address}</p>}
                                 {branch.phone && <p>{branch.phone}</p>}
+                                <p className="pt-1">
+                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-semibold rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300">
+                                        {INDUSTRY_PROFILES[branch.industryId ?? defaultIndustryId]?.icon}
+                                        {t(`industry_${branch.industryId ?? defaultIndustryId}` as any)}
+                                    </span>
+                                </p>
                             </div>
                             <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
                                 {!isCurrent && branch.isActive ? (

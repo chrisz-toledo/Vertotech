@@ -92,7 +92,8 @@ export const useFinanceStore = create<FinanceState & FinanceActions>()(
                 if (isEditing) {
                     return { invoices: invoices.map(inv => inv.id === data.id ? data : inv) };
                 }
-                const newInvoiceNumber = (Math.max(0, ...invoices.map(i => parseInt(i.invoiceNumber, 10))) + 1).toString().padStart(5, '0');
+                const numericNumbers = invoices.map(i => parseInt(i.invoiceNumber, 10)).filter(n => !isNaN(n));
+                const newInvoiceNumber = (Math.max(0, ...numericNumbers) + 1).toString().padStart(5, '0');
                 const newInvoice: Invoice = { ...data, id: `inv-${Date.now()}`, invoiceNumber: newInvoiceNumber, createdAt: new Date().toISOString() };
                 return { invoices: [...invoices, newInvoice] };
             }),
