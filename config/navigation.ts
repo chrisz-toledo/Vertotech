@@ -10,7 +10,7 @@ import { ShieldCheckIcon } from '../components/icons/new/ShieldCheckIcon';
 import { TicketIcon } from '../components/icons/new/TicketIcon';
 import { InvoiceIcon } from '../components/icons/new/InvoiceIcon';
 import { FolderIcon } from '../components/icons/new/FolderIcon';
-import { ToolboxIconSimple } from '../components/icons/new/ToolboxIcon';
+import { ToolboxIconSimple, ToolboxIcon } from '../components/icons/new/ToolboxIcon';
 import { CreditCardIcon } from '../components/icons/new/CreditCardIcon';
 import { ReceiptIcon } from '../components/icons/new/ReceiptIcon';
 import { CalendarIcon } from '../components/icons/new/CalendarIcon';
@@ -38,6 +38,7 @@ import { ChartPieIcon } from '../components/icons/new/ChartPieIcon';
 import { BookOpenIcon } from '../components/icons/new/BookOpenIcon';
 import { TargetIcon } from '../components/icons/new/TargetIcon';
 import { ViewType } from '../types';
+import { IndustryId } from '../types/industry';
 import { ModalId } from '../hooks/useModalManager';
 import { ClipboardCheckIcon } from '../components/icons/new/ClipboardCheckIcon';
 import { SlidersIcon } from '../components/icons/new/SlidersIcon';
@@ -48,6 +49,8 @@ type NavItem = {
     action?: { type: 'modal', id: ModalId } | { type: 'view', id: ViewType };
     /** Optional permission key (e.g. 'view:roles'). The item is hidden when the current user lacks it. */
     requiredPermission?: string;
+    /** Optional industries this item is visible in. Items without it stay visible in every industry. */
+    industries?: IndustryId[];
 };
 
 export type NavGroup = {
@@ -79,6 +82,7 @@ export const getNavGroupDefinitions = (): NavGroup[] => [
         items: [
             { id: 'crm', icon: React.createElement(HandshakeIcon, { className: "w-5 h-5" }) },
             { id: 'prospects', icon: React.createElement(BullhornIcon, { className: "w-5 h-5" }) },
+            { id: 'pos', industries: ['retail', 'servicios'], icon: React.createElement(CashIcon, { className: "w-5 h-5" }) },
         ],
         requiredRoles: ['Owner', 'Project Manager']
     },
@@ -131,6 +135,8 @@ export const getNavGroupDefinitions = (): NavGroup[] => [
             { id: 'warehouses', icon: React.createElement(BuildingIcon, { className: "w-5 h-5" }) },
             { id: 'stock-movements', icon: React.createElement(ArrowsRightLeftIcon, { className: "w-5 h-5" }) },
             { id: 'fleet', icon: React.createElement(TruckIcon, { className: "w-5 h-5" }) },
+            { id: 'tables', industries: ['restaurante'], icon: React.createElement(TicketIcon, { className: "w-5 h-5" }) },
+            { id: 'service-orders', industries: ['taller'], icon: React.createElement(ToolboxIcon, { className: "w-5 h-5" }) },
             { id: 'safety', icon: React.createElement(ShieldCheckIcon, { className: "w-5 h-5" }) },
             { id: 'documents', icon: React.createElement(FolderIcon, { className: "w-5 h-5" }) },
             { id: 'contracts', icon: React.createElement(FileSignatureIcon, { className: "w-5 h-5" }) },

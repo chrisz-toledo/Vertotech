@@ -8,8 +8,11 @@ import { useAiStore } from '../hooks/stores/useAiStore';
 import { useModalManager } from '../hooks/useModalManager';
 import { useTranslation } from '../hooks/useTranslation';
 import { useCurrentUserRoleIds, usePermissions } from '../hooks/usePermissions';
+import { useCurrentIndustryId } from '../hooks/stores/useIndustryStore';
+import { INDUSTRY_PROFILES } from '../types/industry';
 import type { ViewType } from '../types';
 import { ShieldCheckIcon } from './icons/new/ShieldCheckIcon';
+import { GlobeIcon } from './icons/GlobeIcon';
 
 // UI Components
 import Dashboard from './new/Dashboard';
@@ -55,6 +58,9 @@ import LedgerView from './new/LedgerView';
 import TrialBalanceView from './new/TrialBalanceView';
 import ReconciliationView from './new/ReconciliationView';
 import RolesView from './new/RolesView';
+import POSView from './new/POSView';
+import TablesView from './new/TablesView';
+import ServiceOrdersView from './new/ServiceOrdersView';
 
 /**
  * View id → required permission key. Views not listed here default to `view:<id>`.
@@ -74,12 +80,26 @@ const AccessDenied: React.FC = () => {
     );
 };
 
+const IndustryNotAvailable: React.FC = () => {
+    const { t } = useTranslation();
+    const currentIndustryId = useCurrentIndustryId();
+    const profile = INDUSTRY_PROFILES[currentIndustryId] ?? INDUSTRY_PROFILES.construccion;
+    return (
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+            <GlobeIcon className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-4" />
+            <h2 className="text-xl font-bold text-gray-700 dark:text-gray-200">{t('industry_notAvailable')}</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('industry_notAvailableDesc', { industry: profile.name })}</p>
+        </div>
+    );
+};
+
 const AppRouter: React.FC = () => {
     const { open: openModal } = useModalManager();
     const currentView = useAppStore(s => s.currentView);
     const currentUserId = useAppStore(s => s.currentUser?.id);
     const userRoleIds = useCurrentUserRoleIds(currentUserId);
     const can = usePermissions(userRoleIds);
+    const currentIndustryId = useCurrentIndustryId();
     const peopleStore = usePeopleStore();
     const crmStore = useCrmStore();
     const financeStore = useFinanceStore();
@@ -91,6 +111,13 @@ const AppRouter: React.FC = () => {
     // roles fall back to allowed (legacy behavior).
     if (!can(viewPermission(currentView))) {
         return <AccessDenied />;
+    }
+
+    // Industry guard: views not enabled for the current industry render a
+    // placeholder instead of the view.
+    const industryProfile = INDUSTRY_PROFILES[currentIndustryId] ?? INDUSTRY_PROFILES.construccion;
+    if (!industryProfile.enabledViews.includes(currentView)) {
+        return <IndustryNotAvailable />;
     }
 
     switch (currentView) {
@@ -175,6 +202,9 @@ const AppRouter: React.FC = () => {
         case 'reconciliation': return <ReconciliationView />;
         case 'warehouses': return <WarehousesView />;
         case 'stock-movements': return <StockMovementsView />;
+        case 'pos': return <POSView />;
+        case 'tables': return <TablesView />;
+        case 'service-orders': return <ServiceOrdersView />;
         case 'fleet': return <FleetView 
             vehicles={operationsStore.vehicles}
             maintenanceLogs={operationsStore.maintenanceLogs}
