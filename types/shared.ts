@@ -85,7 +85,7 @@ export interface Notification {
   read: boolean;
 }
 
-export type ViewType = 'dashboard' | 'my-day' | 'bids' | 'employees' | 'clients' | 'subcontractors' | 'jobsites' | 'planning' | 'time-tracking' | 'productivity' | 'extra-work' | 'payroll' | 'balance' | 'invoices' | 'estimates' | 'purchase-orders' | 'payables' | 'petty-cash' | 'expenses' | 'inventory' | 'warehouses' | 'stock-movements' | 'fleet' | 'training' | 'safety' | 'analytics' | 'documents' | 'legal' | 'prices' | 'crm' | 'prospects' | 'suppliers' | 'daily-logs' | 'project-center' | 'leave-requests' | 'contracts' | 'tasks' | 'branches' | 'accounting' | 'journal' | 'ledger' | 'trial-balance' | 'reconciliation' | 'roles';
+export type ViewType = 'dashboard' | 'my-day' | 'bids' | 'employees' | 'clients' | 'subcontractors' | 'jobsites' | 'planning' | 'time-tracking' | 'productivity' | 'extra-work' | 'payroll' | 'balance' | 'invoices' | 'estimates' | 'purchase-orders' | 'payables' | 'petty-cash' | 'expenses' | 'inventory' | 'warehouses' | 'stock-movements' | 'fleet' | 'training' | 'safety' | 'analytics' | 'documents' | 'legal' | 'prices' | 'crm' | 'prospects' | 'suppliers' | 'daily-logs' | 'project-center' | 'leave-requests' | 'contracts' | 'tasks' | 'branches' | 'accounting' | 'journal' | 'ledger' | 'trial-balance' | 'reconciliation' | 'roles' | 'pos' | 'tables' | 'service-orders';
 
 export type TrashableType = 
     | 'employees' | 'clients' | 'jobsites' | 'timeLogs' | 'extraWorkTickets' 

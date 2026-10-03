@@ -7,3 +7,4 @@ export * from './branch';
 export * from './accounting';
 export * from './warehouse';
 export * from './roles';
+export * from './industry';
